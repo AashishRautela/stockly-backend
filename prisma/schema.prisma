@@ -1,0 +1,11 @@
+// Root Prisma schema fragments live in `prisma/models`.
+// Prisma loads this file together with the other `.prisma` files in the `prisma` folder.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}

@@ -1,0 +1,69 @@
+model Organization {
+  id            String             @id @default(uuid()) @db.Uuid
+  name          String
+  slug          String             @unique
+  email         String?            @unique
+  business_name String?
+  phone_number  String?
+  website       String?
+  logo          String?
+  industry      String?
+  country       String?
+  timezone      String             @default("Asia/Kolkata")
+  currency      String             @default("INR")
+  status        OrganizationStatus @default(ACTIVE)
+  created_at    DateTime           @default(now())
+  updated_at    DateTime           @updatedAt
+
+  organization_members OrganizationMember[]
+  roles                Role[]
+
+  @@map("organizations")
+}
+
+model User {
+  id         String     @id @default(uuid()) @db.Uuid
+  first_name String?
+  last_name  String?
+  email      String     @unique
+  password   String?
+  status     UserStatus @default(ACTIVE)
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+
+  memberships   OrganizationMember[]
+  roles_created Role[]               @relation("RoleCreatedBy")
+  roles_updated Role[]               @relation("RoleUpdatedBy")
+
+  @@map("users")
+}
+
+model OrganizationMember {
+  id           String       @id @default(uuid()) @db.Uuid
+  user_id      String       @db.Uuid
+  user         User         @relation(fields: [user_id], references: [id])
+  org_id       String       @db.Uuid
+  organization Organization @relation(fields: [org_id], references: [id])
+  joined_at    DateTime
+
+  @@map("organization_members")
+}
+
+model Role {
+  id              String       @id @default(uuid()) @db.Uuid
+  name            String
+  description     String?
+  org_id          String       @db.Uuid
+  organization    Organization @relation(fields: [org_id], references: [id])
+  permissions     Json
+  created_at      DateTime     @default(now())
+  created_by_type AuditActorType @default(USER)
+  created_by      String?      @db.Uuid
+  created_by_user User?        @relation("RoleCreatedBy", fields: [created_by], references: [id])
+  updated_at      DateTime     @updatedAt
+  updated_by_type AuditActorType @default(USER)
+  updated_by      String?      @db.Uuid
+  updated_by_user User?        @relation("RoleUpdatedBy", fields: [updated_by], references: [id])
+
+  @@map("roles")
+}
