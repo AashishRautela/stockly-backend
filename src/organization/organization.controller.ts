@@ -2,7 +2,10 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { OrganizationService } from './organization.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 
-@Controller('organizations')
+@Controller({
+  path: 'organizations',
+  version: '1',
+})
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
