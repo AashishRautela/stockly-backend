@@ -2,8 +2,9 @@
 // Prisma loads this file together with the other `.prisma` files in the `prisma` folder.
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {

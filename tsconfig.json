@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "types": ["jest"],
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "types": ["jest","node"],
+    "moduleResolution": "node",
+    // "resolvePackageJsonExports": true,
+    "module": "commonjs",
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -22,6 +22,6 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "5.0"
   }
 }
