@@ -4,8 +4,8 @@ export class CreateOrganizationDto {
   @IsString()
   name!: string;
 
-  @IsString()
-  slug!: string;
+  // @IsString()
+  // slug!: string;
 
   @IsOptional()
   @IsEmail()

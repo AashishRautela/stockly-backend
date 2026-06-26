@@ -1,0 +1,109 @@
+[
+  {
+    "name": "Owner",
+    "description": "Full control over the organization, members, and roles.",
+    "created_by": "System",
+    "permissions": {
+      "organization": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "manage_settings"
+      ],
+      "users": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "invite",
+        "assign_roles"
+      ],
+      "roles": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "assign"
+      ]
+    }
+  },
+  {
+    "name": "Admin",
+    "description": "Manages day-to-day operations, users, and most role assignments.",
+    "created_by": "System",
+    "permissions": {
+      "organization": [
+        "read",
+        "update",
+        "manage_settings"
+      ],
+      "users": [
+        "read",
+        "create",
+        "update",
+        "delete",
+        "invite",
+        "assign_roles"
+      ],
+      "roles": [
+        "read",
+        "create",
+        "update",
+        "assign"
+      ]
+    }
+  },
+  {
+    "name": "Manager",
+    "description": "Manages team members and operational work inside the organization.",
+    "created_by": "System",
+    "permissions": {
+      "organization": [
+        "read"
+      ],
+      "users": [
+        "read",
+        "create",
+        "update",
+        "invite"
+      ],
+      "roles": [
+        "read",
+        "assign"
+      ]
+    }
+  },
+  {
+    "name": "Employee",
+    "description": "Standard working role with limited access to organization data.",
+    "created_by": "System",
+    "permissions": {
+      "organization": [
+        "read"
+      ],
+      "users": [
+        "read"
+      ],
+      "roles": [
+        "read"
+      ]
+    }
+  },
+  {
+    "name": "Viewer",
+    "description": "Read-only access for auditing, observers, or external stakeholders.",
+    "created_by": "System",
+    "permissions": {
+      "organization": [
+        "read"
+      ],
+      "users": [
+        "read"
+      ],
+      "roles": [
+        "read"
+      ]
+    }
+  }
+]

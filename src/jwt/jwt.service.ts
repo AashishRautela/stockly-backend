@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { sign } from 'jsonwebtoken';
+import { JwtPayload as BaseJwtPayload, sign, verify } from 'jsonwebtoken';
 import { AppError } from 'src/common/errors/app-error';
 
-type JwtPayload = {
+export type JwtPayload = {
   sub: string;
   email: string;
 };
@@ -31,7 +31,7 @@ export class JwtService {
 
   generateAccessToken(payload: JwtPayload) {
     return sign(payload, this.getAccessSecret(), {
-      expiresIn: '15m',
+      expiresIn: '1h',
     });
   }
 
@@ -39,5 +39,21 @@ export class JwtService {
     return sign(payload, this.getRefreshSecret(), {
       expiresIn: '7d',
     });
+  }
+
+  verifyAccessToken(token: string) {
+    try {
+      return verify(token, this.getAccessSecret()) as BaseJwtPayload & JwtPayload;
+    } catch {
+      throw new AppError('Invalid access token', 401);
+    }
+  }
+
+  verifyRefreshToken(token: string) {
+    try {
+      return verify(token, this.getRefreshSecret()) as BaseJwtPayload & JwtPayload;
+    } catch {
+      throw new AppError('Invalid refresh token', 401);
+    }
   }
 }
