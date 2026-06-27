@@ -7,6 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { RolesSeederService } from 'src/seeder/services/roles-seeder.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { randomBytes } from 'crypto';
+import { UpdateOrganizationDto } from './dto/update-organization.dto';
 
 @Injectable()
 export class OrganizationService {
@@ -15,18 +16,17 @@ export class OrganizationService {
     private readonly rolesSeederService: RolesSeederService,
   ) {}
 
-private createSlug(name: string): string {
-  return name
-    .trim()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
+  private createSlug(name: string): string {
+    return name
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  }
 
   async create(body: CreateOrganizationDto, user: JwtPayload) {
     let slug = this.createSlug(body.name);
@@ -49,6 +49,7 @@ private createSlug(name: string): string {
         },
       });
 
+      // Create the default org roles from the seed templates.
       await tx.role.createMany({
         data: roleTemplates.map((role) => ({
           name: role.name,
@@ -84,6 +85,7 @@ private createSlug(name: string): string {
         ]);
       }
 
+      // The org creator becomes the first member with the Owner role.
       await tx.organizationMember.create({
         data: {
           user_id: user.sub,
@@ -95,5 +97,50 @@ private createSlug(name: string): string {
     });
 
     return SuccessResponse('Organization created successfully');
+  }
+
+  async update(id: string, body: UpdateOrganizationDto, _user: JwtPayload) {
+    const existingOrganization = await this.prisma.organization.findUnique({
+      where: { id },
+    });
+
+    if (!existingOrganization) {
+      throw new AppError('Organization not found', 404);
+    }
+
+    let nextSlug = body.slug;
+
+    if (body.name && !nextSlug) {
+      nextSlug = this.createSlug(body.name);
+    }
+
+    if (nextSlug) {
+      nextSlug = this.createSlug(nextSlug);
+
+      const organizationWithSameSlug = await this.prisma.organization.findFirst(
+        {
+          where: {
+            slug: nextSlug,
+            NOT: {
+              id,
+            },
+          },
+        },
+      );
+
+      if (organizationWithSameSlug) {
+        nextSlug = `${nextSlug}-${randomBytes(4).toString('hex')}`;
+      }
+    }
+
+    await this.prisma.organization.update({
+      where: { id },
+      data: {
+        ...body,
+        ...(nextSlug ? { slug: nextSlug } : {}),
+      },
+    });
+
+    return SuccessResponse('Organization updated successfully');
   }
 }

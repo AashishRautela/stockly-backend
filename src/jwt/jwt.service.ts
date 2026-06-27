@@ -43,7 +43,8 @@ export class JwtService {
 
   verifyAccessToken(token: string) {
     try {
-      return verify(token, this.getAccessSecret()) as BaseJwtPayload & JwtPayload;
+      return verify(token, this.getAccessSecret()) as BaseJwtPayload &
+        JwtPayload;
     } catch {
       throw new AppError('Invalid access token', 401);
     }
@@ -51,7 +52,8 @@ export class JwtService {
 
   verifyRefreshToken(token: string) {
     try {
-      return verify(token, this.getRefreshSecret()) as BaseJwtPayload & JwtPayload;
+      return verify(token, this.getRefreshSecret()) as BaseJwtPayload &
+        JwtPayload;
     } catch {
       throw new AppError('Invalid refresh token', 401);
     }

@@ -17,27 +17,27 @@ export class UserController {
   }
 
   @Post('signin')
-    async signin(
-      @Body() body: UserLoginDto,
-      @Res({ passthrough: true }) response: Response,
-    ) {
-        const result = await this.userService.signin(body);
-        const isProduction = process.env.NODE_ENV === 'production';
+  async signin(
+    @Body() body: UserLoginDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.userService.signin(body);
+    const isProduction = process.env.NODE_ENV === 'production';
 
-        response.cookie('accessToken', result.accessToken, {
-          httpOnly: true,
-          sameSite: 'lax',
-          secure: isProduction,
-          maxAge: 15 * 60 * 1000,
-        });
+    response.cookie('accessToken', result.accessToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: isProduction,
+      maxAge: 15 * 60 * 1000,
+    });
 
-        response.cookie('refreshToken', result.refreshToken, {
-          httpOnly: true,
-          sameSite: 'lax',
-          secure: isProduction,
-          maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+    response.cookie('refreshToken', result.refreshToken, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: isProduction,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
 
-        return result.response;
+    return result.response;
   }
 }

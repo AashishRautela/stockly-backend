@@ -24,15 +24,15 @@ model Organization {
 }
 
 model User {
-  id         String     @id @default(uuid()) @db.Uuid
-  first_name String?
-  last_name  String?
-  email      String     @unique
-  password   String?
+  id           String     @id @default(uuid()) @db.Uuid
+  first_name   String?
+  last_name    String?
+  email        String     @unique
+  password     String?
   phone_number String?
-  status     UserStatus @default(ACTIVE)
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
+  status       UserStatus @default(ACTIVE)
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
 
   memberships          OrganizationMember[]
   roles_created        Role[]               @relation("RoleCreatedBy")
@@ -49,27 +49,27 @@ model OrganizationMember {
   org_id       String       @db.Uuid
   organization Organization @relation(fields: [org_id], references: [id])
   role_id      String       @db.Uuid
-  role         Role         @relation(fields:[role_id],references:[id])
+  role         Role         @relation(fields: [role_id], references: [id])
   joined_at    DateTime
 
   @@map("organization_members")
 }
 
 model Role {
-  id              String         @id @default(uuid()) @db.Uuid
+  id              String               @id @default(uuid()) @db.Uuid
   name            String
   description     String?
-  org_id          String         @db.Uuid
-  organization    Organization   @relation(fields: [org_id], references: [id])
+  org_id          String               @db.Uuid
+  organization    Organization         @relation(fields: [org_id], references: [id])
   permissions     Json
-  created_at      DateTime       @default(now())
-  created_by_type AuditActorType @default(USER)
-  created_by      String?        @db.Uuid
-  created_by_user User?          @relation("RoleCreatedBy", fields: [created_by], references: [id])
-  updated_at      DateTime       @updatedAt
-  updated_by_type AuditActorType @default(USER)
-  updated_by      String?        @db.Uuid
-  updated_by_user User?          @relation("RoleUpdatedBy", fields: [updated_by], references: [id])
+  created_at      DateTime             @default(now())
+  created_by_type AuditActorType       @default(USER)
+  created_by      String?              @db.Uuid
+  created_by_user User?                @relation("RoleCreatedBy", fields: [created_by], references: [id])
+  updated_at      DateTime             @updatedAt
+  updated_by_type AuditActorType       @default(USER)
+  updated_by      String?              @db.Uuid
+  updated_by_user User?                @relation("RoleUpdatedBy", fields: [updated_by], references: [id])
   memebers        OrganizationMember[]
 
   @@map("roles")
