@@ -48,6 +48,8 @@ model OrganizationMember {
   user         User         @relation(fields: [user_id], references: [id])
   org_id       String       @db.Uuid
   organization Organization @relation(fields: [org_id], references: [id])
+  role_id      String       @db.Uuid
+  role         Role         @relation(fields:[role_id],references:[id])
   joined_at    DateTime
 
   @@map("organization_members")
@@ -68,6 +70,7 @@ model Role {
   updated_by_type AuditActorType @default(USER)
   updated_by      String?        @db.Uuid
   updated_by_user User?          @relation("RoleUpdatedBy", fields: [updated_by], references: [id])
+  memebers        OrganizationMember[]
 
   @@map("roles")
 }

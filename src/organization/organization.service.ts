@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuditActorType } from '../../generated/prisma/enums';
+import { AppError } from 'src/common/errors/app-error';
 import { SuccessResponse } from 'src/common/responses/success-response';
 import { JwtPayload } from 'src/jwt/jwt.service';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -48,14 +49,6 @@ private createSlug(name: string): string {
         },
       });
 
-      await tx.organizationMember.create({
-        data: {
-          user_id: user.sub,
-          org_id: organization.id,
-          joined_at: new Date(),
-        },
-      });
-
       await tx.role.createMany({
         data: roleTemplates.map((role) => ({
           name: role.name,
@@ -73,6 +66,31 @@ private createSlug(name: string): string {
               : AuditActorType.USER,
           updated_by: role.created_by === 'System' ? null : user.sub,
         })),
+      });
+
+      const ownerRole = await tx.role.findFirst({
+        where: {
+          org_id: organization.id,
+          name: 'Owner',
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!ownerRole) {
+        throw new AppError('Owner role could not be created', 500, [
+          'Organization bootstrap failed because the Owner role was not found',
+        ]);
+      }
+
+      await tx.organizationMember.create({
+        data: {
+          user_id: user.sub,
+          org_id: organization.id,
+          role_id: ownerRole.id,
+          joined_at: new Date(),
+        },
       });
     });
 
