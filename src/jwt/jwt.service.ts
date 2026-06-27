@@ -31,7 +31,7 @@ export class JwtService {
 
   generateAccessToken(payload: JwtPayload) {
     return sign(payload, this.getAccessSecret(), {
-      expiresIn: '1h',
+      expiresIn: '1d',
     });
   }
 

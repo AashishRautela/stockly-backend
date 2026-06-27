@@ -101,7 +101,9 @@ export class OrganizationService {
 
   async update(id: string, body: UpdateOrganizationDto, _user: JwtPayload) {
     const existingOrganization = await this.prisma.organization.findUnique({
-      where: { id },
+      where: { id,
+        deleted_at:null
+       },
     });
 
     if (!existingOrganization) {
@@ -142,5 +144,52 @@ export class OrganizationService {
     });
 
     return SuccessResponse('Organization updated successfully');
+  }
+
+  async get(id:string,user:JwtPayload){
+    const organization=await this.prisma.organization.findFirst({
+      where:{id,
+        deleted_at:null
+      },
+      select:{
+        id:true,
+        name:true,
+        slug:true,
+        email:true,
+        business_name:true,
+        phone_number:true,
+        website:true,
+        logo:true,
+        industry:true,
+        country:true,
+        timezone:true,  
+        currency:true
+      }
+    })
+
+    if(!organization){
+      throw new AppError("Organization not found",404)
+    }
+
+    return SuccessResponse("Organiation details get successfully",organization)
+  }
+
+  async delete(id:string,user:JwtPayload){
+     const organization = await this.prisma.organization.findUnique({
+      where: { id },
+    });
+
+    if (!organization) {
+      throw new AppError('Organization not found', 404);
+    }
+
+    await this.prisma.organization.update({
+      where:{id},
+      data:{
+        deleted_at:new Date(),
+      }
+    })
+
+    return SuccessResponse("Organization deleted successfully")
   }
 }
