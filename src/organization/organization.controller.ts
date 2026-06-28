@@ -26,53 +26,47 @@ const MODULE = 'organization';
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
-
   // --------------------------------------------------- create organization -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'create')
   @Post('/')
-    create(
-      @Body() body: CreateOrganizationDto,
-      @CurrentUser() user: JwtPayload,
-    ) {
-      return this.organizationService.create(body, user);
-    }
+  create(@Body() body: CreateOrganizationDto, @CurrentUser() user: JwtPayload) {
+    return this.organizationService.create(body, user);
+  }
 
   // --------------------------------------------------- update organization -------------------------------------------------
 
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'update')
   @Patch(':id')
-    update(
-      @Param('id') id: string,
-      @Body() body: UpdateOrganizationDto,
-      @CurrentUser() user: JwtPayload,
-    ) {
-      return this.organizationService.update(id, body, user);
-    }
-
+  update(
+    @Param('id') id: string,
+    @Body() body: UpdateOrganizationDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.organizationService.update(id, body, user);
+  }
 
   // --------------------------------------------------- get organization detail -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'read')
-  @Get(":id")
-    get(
-      @Param('id') id: string,
-      @CurrentUser() user: JwtPayload,
-    ){
-    return this.organizationService.get(id,user);
-    }
-
+  @Get(':id')
+  get(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
+    return this.organizationService.get(id, user);
+  }
 
   // --------------------------------------------------- delete organization -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'delete')
   @Delete(':id')
-    delete(
-      @Param('id') id: string,
-      @CurrentUser() user: JwtPayload,
-    ){
-    return this.organizationService.delete(id,user);
-    }
+  delete(@Param('id') id: string, @CurrentUser() user: JwtPayload) {
+    return this.organizationService.delete(id, user);
+  }
 
+  // --------------------------------------------------- get organizations list -------------------------------------------------
+  @UseGuards(AuthGuard, PermissionGuard)
+  @Get('/')
+  getOrgLisT(@CurrentUser() user: JwtPayload) {
+    return this.organizationService.getOrgList(user);
+  }
 }

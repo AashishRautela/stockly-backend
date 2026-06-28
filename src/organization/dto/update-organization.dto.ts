@@ -3,6 +3,6 @@ import { CreateOrganizationDto } from './create-organization.dto';
 import { IsOptional } from 'class-validator';
 
 export class UpdateOrganizationDto extends PartialType(CreateOrganizationDto) {
-  @IsOptional() 
+  @IsOptional()
   slug?: string;
 }

@@ -4,6 +4,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { UserLoginDto } from './dto/user-login.dto';
 
+const ACCESS_TOKEN_COOKIE_MAX_AGE = 24 * 60 * 60 * 1000;
+const REFRESH_TOKEN_COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+
 @Controller({
   path: 'user',
   version: '1',
@@ -28,14 +31,14 @@ export class UserController {
       httpOnly: true,
       sameSite: 'lax',
       secure: isProduction,
-      maxAge: 15 * 60 * 1000,
+      maxAge: ACCESS_TOKEN_COOKIE_MAX_AGE,
     });
 
     response.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       sameSite: 'lax',
       secure: isProduction,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: REFRESH_TOKEN_COOKIE_MAX_AGE,
     });
 
     return result.response;
