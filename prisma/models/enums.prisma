@@ -14,3 +14,9 @@ enum AuditActorType {
   USER
   SYSTEM
 }
+
+enum WarehouseStatus {
+  ACTIVE
+  INACTIVE
+  UNDER_MAINTENANCE
+}

@@ -1,0 +1,17 @@
+model Warehouse {
+  id            String          @id @default(uuid()) @db.Uuid
+  name          String
+  code          String
+  location      String?
+  status        WarehouseStatus @default(ACTIVE)
+  org_id        String          @db.Uuid
+  organization  Organization    @relation(fields: [org_id], references: [id])
+  created_by_id String          @db.Uuid
+  created_by    User            @relation(fields: [created_by_id], references: [id])
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  deleted_at    DateTime?
+
+  @@unique([org_id, code])
+  @@map("warehouses")
+}
