@@ -31,6 +31,12 @@
         "create",
         "update",
         "delete"
+      ],
+      "product": [
+        "read",
+        "create",
+        "update",
+        "delete"
       ]
     }
   },
@@ -63,6 +69,12 @@
         "create",
         "update",
         "delete"
+      ],
+      "product": [
+        "read",
+        "create",
+        "update",
+        "delete"
       ]
     }
   },
@@ -88,6 +100,11 @@
         "read",
         "create",
         "update"
+      ],
+      "product": [
+        "read",
+        "create",
+        "update"
       ]
     }
   },
@@ -107,6 +124,9 @@
       ],
       "warehouse": [
         "read"
+      ],
+      "product": [
+        "read"
       ]
     }
   },
@@ -125,6 +145,9 @@
         "read"
       ],
       "warehouse": [
+        "read"
+      ],
+      "product": [
         "read"
       ]
     }
