@@ -4,9 +4,6 @@ export class AddMemberDto {
   @IsEmail()
   email!: string;
 
-  @IsUUID()
-  org_id!: string;
-
   @IsOptional()
   @IsUUID()
   role_id?: string;

@@ -6,6 +6,7 @@ import {
   PermissionMetadata,
 } from 'src/auth/decorators/permissions.decorator';
 import { AppError } from 'src/common/errors/app-error';
+import { ORG_ID } from 'src/auth/decorators/current-org.decorator';
 import { JwtPayload } from 'src/jwt/jwt.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -62,7 +63,10 @@ export class PermissionGuard implements CanActivate {
       return false;
     }
 
+    const orgHeader = request.headers[ORG_ID];
+
     const organizationId =
+      (Array.isArray(orgHeader) ? orgHeader[0] : orgHeader) ||
       request.params?.id ||
       request.body?.org_id ||
       request.body?.organization_id;

@@ -130,15 +130,15 @@ export class MemberService {
     `;
   }
 
-  async addMember(body: AddMemberDto, _user: JwtPayload) {
+  async addMember(body: AddMemberDto, _user: JwtPayload, orgId: string) {
     const email = this.normalizeEmail(body.email);
 
     if (!email) {
       throw new AppError('Email is required', 400);
     }
 
-    const organization = await this.getOrganization(body.org_id);
-    const role = await this.getRole(body.org_id, body.role_id);
+    const organization = await this.getOrganization(orgId);
+    const role = await this.getRole(orgId, body.role_id);
     const temporaryPassword = await this.generateTemporaryPassword();
     const hashedPassword = await hash(temporaryPassword, 10);
 
@@ -166,7 +166,7 @@ export class MemberService {
 
       const existingMembership = await tx.organizationMember.findFirst({
         where: {
-          org_id: body.org_id,
+          org_id: orgId,
           user_id: userRecord.id,
           deleted_at: null,
         },
@@ -181,7 +181,7 @@ export class MemberService {
 
       await tx.organizationMember.create({
         data: {
-          org_id: body.org_id,
+          org_id: orgId,
           user_id: userRecord.id,
           role_id: role.id,
           joined_at: new Date(),
@@ -206,18 +206,22 @@ export class MemberService {
     return SuccessResponse('Member added successfully');
   }
 
-  async resendMemberAccess(body: ResendMemberAccessDto, _user: JwtPayload) {
+  async resendMemberAccess(
+    body: ResendMemberAccessDto,
+    _user: JwtPayload,
+    orgId: string,
+  ) {
     const email = this.normalizeEmail(body.email);
 
     if (!email) {
       throw new AppError('Email is required', 400);
     }
 
-    const organization = await this.getOrganization(body.org_id);
+    const organization = await this.getOrganization(orgId);
 
     const membership = await this.prisma.organizationMember.findFirst({
       where: {
-        org_id: body.org_id,
+        org_id: orgId,
         deleted_at: null,
         user: {
           email,

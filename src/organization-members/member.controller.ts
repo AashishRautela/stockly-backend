@@ -4,6 +4,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { CurrentOrg } from 'src/auth/decorators/current-org.decorator';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 import { Permissions } from 'src/auth/decorators/permissions.decorator';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
@@ -27,8 +28,12 @@ export class MemberController {
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'create')
   @Post('/')
-  addMember(@Body() body: AddMemberDto, @CurrentUser() user: JwtPayload) {
-    return this.memberService.addMember(body, user);
+  addMember(
+    @Body() body: AddMemberDto,
+    @CurrentUser() user: JwtPayload,
+    @CurrentOrg() orgId: string,
+  ) {
+    return this.memberService.addMember(body, user, orgId);
   }
 
   // --------------------------------------------------- resend member access -------------------------------------------------
@@ -38,7 +43,8 @@ export class MemberController {
   resendMemberAccess(
     @Body() body: ResendMemberAccessDto,
     @CurrentUser() user: JwtPayload,
+    @CurrentOrg() orgId: string,
   ) {
-    return this.memberService.resendMemberAccess(body, user);
+    return this.memberService.resendMemberAccess(body, user, orgId);
   }
 }
