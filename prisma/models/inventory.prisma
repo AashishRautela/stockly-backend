@@ -17,21 +17,21 @@ model Warehouse {
 }
 
 model Product {
-  id             String        @id @default(uuid()) @db.Uuid
-  name           String
-  sku            String
-  barcode        String?
-  cost_price     Decimal       @db.Decimal(10, 2)
-  sell_price     Decimal       @db.Decimal(10, 2)
-  reorder_level  Int           @default(0)
-  status         ProductStatus @default(ACTIVE)
-  org_id         String        @db.Uuid
-  organization   Organization  @relation(fields: [org_id], references: [id])
-  created_by_id  String        @db.Uuid
-  created_by     User          @relation(fields: [created_by_id], references: [id])
-  created_at     DateTime      @default(now())
-  updated_at     DateTime      @updatedAt
-  deleted_at     DateTime?
+  id            String        @id @default(uuid()) @db.Uuid
+  name          String
+  sku           String
+  barcode       String?
+  cost_price    Decimal       @db.Decimal(10, 2)
+  sell_price    Decimal       @db.Decimal(10, 2)
+  reorder_level Int           @default(0)
+  status        ProductStatus @default(ACTIVE)
+  org_id        String        @db.Uuid
+  organization  Organization  @relation(fields: [org_id], references: [id])
+  created_by_id String        @db.Uuid
+  created_by    User          @relation(fields: [created_by_id], references: [id])
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  deleted_at    DateTime?
 
   @@unique([org_id, sku])
   @@unique([org_id, barcode])
