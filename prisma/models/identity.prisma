@@ -21,6 +21,7 @@ model Organization {
   organization_members OrganizationMember[]
   roles                Role[]
   warehouses           Warehouse[]
+  products             Product[]
 
   @@map("organizations")
 }
@@ -42,6 +43,7 @@ model User {
   roles_updated        Role[]               @relation("RoleUpdatedBy")
   organization_created Organization[]       @relation("OrganizationCreatedBy")
   warehouses_created   Warehouse[]
+  products_created      Product[]
 
   @@map("users")
 }

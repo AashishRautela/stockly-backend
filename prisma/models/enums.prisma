@@ -20,3 +20,9 @@ enum WarehouseStatus {
   INACTIVE
   UNDER_MAINTENANCE
 }
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
