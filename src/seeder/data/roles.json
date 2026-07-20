@@ -25,6 +25,12 @@
         "update",
         "delete",
         "assign"
+      ],
+      "warehouse": [
+        "read",
+        "create",
+        "update",
+        "delete"
       ]
     }
   },
@@ -51,6 +57,12 @@
         "create",
         "update",
         "assign"
+      ],
+      "warehouse": [
+        "read",
+        "create",
+        "update",
+        "delete"
       ]
     }
   },
@@ -71,6 +83,11 @@
       "roles": [
         "read",
         "assign"
+      ],
+      "warehouse": [
+        "read",
+        "create",
+        "update"
       ]
     }
   },
@@ -87,6 +104,9 @@
       ],
       "roles": [
         "read"
+      ],
+      "warehouse": [
+        "read"
       ]
     }
   },
@@ -102,6 +122,9 @@
         "read"
       ],
       "roles": [
+        "read"
+      ],
+      "warehouse": [
         "read"
       ]
     }
