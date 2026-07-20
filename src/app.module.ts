@@ -6,6 +6,7 @@ import { OrganizationModule } from './organization/organization.module';
 import { UserModule } from './user/user.module';
 import { MemberModule } from './organization-members/member.module';
 import { WarehouseModule } from './warehouse/warehouse.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { WarehouseModule } from './warehouse/warehouse.module';
     OrganizationModule,
     MemberModule,
     WarehouseModule,
+    ProductModule,
   ],
   controllers: [AppController],
   providers: [AppService],

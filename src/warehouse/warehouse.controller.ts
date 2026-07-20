@@ -31,47 +31,47 @@ export class WarehouseController {
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'create')
   @Post('/')
-  create(
+  createWarehouse(
     @Body() body: CreateWarehouseDto,
     @CurrentUser() user: JwtPayload,
     @CurrentOrg() orgId: string,
   ) {
-    return this.warehouseService.create(body, user, orgId);
+    return this.warehouseService.createWarehouse(body, user, orgId);
   }
 
   // --------------------------------------------------- get warehouses list -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'read')
   @Get('/')
-  list(@CurrentOrg() orgId: string) {
-    return this.warehouseService.list(orgId);
+  listWarehouses(@CurrentOrg() orgId: string) {
+    return this.warehouseService.listWarehouses(orgId);
   }
 
   // --------------------------------------------------- get warehouse detail -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'read')
   @Get(':id')
-  get(@Param('id') id: string, @CurrentOrg() orgId: string) {
-    return this.warehouseService.get(id, orgId);
+  getWarehouseDetail(@Param('id') id: string, @CurrentOrg() orgId: string) {
+    return this.warehouseService.getWarehouseDetail(id, orgId);
   }
 
   // --------------------------------------------------- update warehouse -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'update')
   @Patch(':id')
-  update(
+  updateWarehouse(
     @Param('id') id: string,
     @Body() body: UpdateWarehouseDto,
     @CurrentOrg() orgId: string,
   ) {
-    return this.warehouseService.update(id, body, orgId);
+    return this.warehouseService.updateWarehouse(id, body, orgId);
   }
 
   // --------------------------------------------------- delete warehouse -------------------------------------------------
   @UseGuards(AuthGuard, PermissionGuard)
   @Permissions(MODULE, 'delete')
   @Delete(':id')
-  delete(@Param('id') id: string, @CurrentOrg() orgId: string) {
-    return this.warehouseService.delete(id, orgId);
+  deleteWarehouse(@Param('id') id: string, @CurrentOrg() orgId: string) {
+    return this.warehouseService.deleteWarehouse(id, orgId);
   }
 }

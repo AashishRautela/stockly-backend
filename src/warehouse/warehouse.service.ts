@@ -32,7 +32,11 @@ export class WarehouseService {
     }
   }
 
-  async create(body: CreateWarehouseDto, user: JwtPayload, orgId: string) {
+  async createWarehouse(
+    body: CreateWarehouseDto,
+    user: JwtPayload,
+    orgId: string,
+  ) {
     await this.assertCodeAvailable(orgId, body.code);
 
     await this.prisma.warehouse.create({
@@ -48,7 +52,7 @@ export class WarehouseService {
     return SuccessResponse('Warehouse created successfully');
   }
 
-  async list(orgId: string) {
+  async listWarehouses(orgId: string) {
     const warehouses = await this.prisma.warehouse.findMany({
       where: { org_id: orgId, deleted_at: null },
     });
@@ -56,7 +60,7 @@ export class WarehouseService {
     return SuccessResponse('Warehouses fetched successfully', warehouses);
   }
 
-  async get(id: string, orgId: string) {
+  async getWarehouseDetail(id: string, orgId: string) {
     const warehouse = await this.prisma.warehouse.findFirst({
       where: { id, org_id: orgId, deleted_at: null },
     });
@@ -68,7 +72,7 @@ export class WarehouseService {
     return SuccessResponse('Warehouse details fetched successfully', warehouse);
   }
 
-  async update(id: string, body: UpdateWarehouseDto, orgId: string) {
+  async updateWarehouse(id: string, body: UpdateWarehouseDto, orgId: string) {
     const warehouse = await this.prisma.warehouse.findFirst({
       where: { id, org_id: orgId, deleted_at: null },
     });
@@ -89,7 +93,7 @@ export class WarehouseService {
     return SuccessResponse('Warehouse updated successfully');
   }
 
-  async delete(id: string, orgId: string) {
+  async deleteWarehouse(id: string, orgId: string) {
     const warehouse = await this.prisma.warehouse.findFirst({
       where: { id, org_id: orgId, deleted_at: null },
     });
