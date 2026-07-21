@@ -1,39 +1,83 @@
 model Warehouse {
-  id            String          @id @default(uuid()) @db.Uuid
-  name          String
-  code          String
-  location      String?
-  status        WarehouseStatus @default(ACTIVE)
-  org_id        String          @db.Uuid
-  organization  Organization    @relation(fields: [org_id], references: [id])
-  created_by_id String          @db.Uuid
-  created_by    User            @relation(fields: [created_by_id], references: [id])
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
-  deleted_at    DateTime?
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String
+  code            String
+  location        String?
+  status          WarehouseStatus @default(ACTIVE)
+  org_id          String          @db.Uuid
+  organization    Organization    @relation(fields: [org_id], references: [id])
+  created_by_id   String          @db.Uuid
+  created_by      User            @relation(fields: [created_by_id], references: [id])
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  deleted_at      DateTime?
+  stocks          Stock[]
+  stock_movements StockMovement[]
 
   @@unique([org_id, code])
   @@map("warehouses")
 }
 
 model Product {
-  id            String        @id @default(uuid()) @db.Uuid
-  name          String
-  sku           String
-  barcode       String?
-  cost_price    Decimal       @db.Decimal(10, 2)
-  sell_price    Decimal       @db.Decimal(10, 2)
-  reorder_level Int           @default(0)
-  status        ProductStatus @default(ACTIVE)
-  org_id        String        @db.Uuid
-  organization  Organization  @relation(fields: [org_id], references: [id])
-  created_by_id String        @db.Uuid
-  created_by    User          @relation(fields: [created_by_id], references: [id])
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  deleted_at    DateTime?
+  id              String          @id @default(uuid()) @db.Uuid
+  name            String
+  sku             String
+  barcode         String?
+  cost_price      Decimal         @db.Decimal(10, 2)
+  sell_price      Decimal         @db.Decimal(10, 2)
+  reorder_level   Int             @default(0)
+  status          ProductStatus   @default(ACTIVE)
+  org_id          String          @db.Uuid
+  organization    Organization    @relation(fields: [org_id], references: [id])
+  created_by_id   String          @db.Uuid
+  created_by      User            @relation(fields: [created_by_id], references: [id])
+  created_at      DateTime        @default(now())
+  updated_at      DateTime        @updatedAt
+  deleted_at      DateTime?
+  stocks          Stock[]
+  stock_movements StockMovement[]
 
   @@unique([org_id, sku])
   @@unique([org_id, barcode])
   @@map("products")
+}
+
+model Stock {
+  id           String       @id @default(uuid()) @db.Uuid
+  on_hand      Int
+  reserved     Int
+  damaged      Int
+  org_id       String       @db.Uuid
+  organization Organization @relation(fields: [org_id], references: [id])
+  product_id   String       @db.Uuid
+  product      Product      @relation(fields: [product_id], references: [id])
+  warehouse_id String       @db.Uuid
+  warehouse    Warehouse    @relation(fields: [warehouse_id], references: [id])
+  created_at   DateTime     @default(now())
+  updated_at   DateTime     @updatedAt
+  deleted_at   DateTime?
+
+  @@unique([org_id, warehouse_id, product_id])
+  @@map("stocks")
+}
+
+model StockMovement {
+  id             String            @id @default(uuid()) @db.Uuid
+  quantity       Int
+  movement_type  StockMovementType
+  org_id         String            @db.Uuid
+  organization   Organization      @relation(fields: [org_id], references: [id])
+  product_id     String            @db.Uuid
+  product        Product           @relation(fields: [product_id], references: [id])
+  warehouse_id   String            @db.Uuid
+  warehouse      Warehouse         @relation(fields: [warehouse_id], references: [id])
+  reference_type String?
+  reference_id   String?           @db.Uuid
+  created_at     DateTime          @default(now())
+  created_by_id  String            @db.Uuid
+  created_by     User              @relation(fields: [created_by_id], references: [id])
+
+  @@index([org_id, product_id, warehouse_id])
+  @@index([org_id, reference_type, reference_id])
+  @@map("stock_movements")
 }

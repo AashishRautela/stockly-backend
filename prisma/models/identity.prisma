@@ -22,6 +22,8 @@ model Organization {
   roles                Role[]
   warehouses           Warehouse[]
   products             Product[]
+  stocks               Stock[]
+  stock_movements      StockMovement[]
 
   @@map("organizations")
 }
@@ -38,12 +40,13 @@ model User {
   updated_at   DateTime   @updatedAt
   deleted_at   DateTime?
 
-  memberships          OrganizationMember[]
-  roles_created        Role[]               @relation("RoleCreatedBy")
-  roles_updated        Role[]               @relation("RoleUpdatedBy")
-  organization_created Organization[]       @relation("OrganizationCreatedBy")
-  warehouses_created   Warehouse[]
-  products_created     Product[]
+  memberships             OrganizationMember[]
+  roles_created           Role[]               @relation("RoleCreatedBy")
+  roles_updated           Role[]               @relation("RoleUpdatedBy")
+  organization_created    Organization[]       @relation("OrganizationCreatedBy")
+  warehouses_created      Warehouse[]
+  products_created        Product[]
+  stock_movements_created StockMovement[]
 
   @@map("users")
 }
